@@ -1,5 +1,13 @@
-import { generateConfirmationCode } from '../includes/helpers.js';
+import { generateConfirmationCode , yenToUsd} from '../includes/helpers.js';
 import { getDb as db } from './db-in-file.js';
+
+
+// function that will convert the months in numberss
+const convertMonthsToNames = (monthsArray) => {
+    if (!monthsArray || !Array.isArray(monthsArray)) return [];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return monthsArray.map(monthNum => monthNames[monthNum - 1] || monthNum);
+};
 
 // ROUTE MODEL FUNCTIONS
 
@@ -120,6 +128,7 @@ export const getRouteWithStations = async (routeId) => {
 
     return {
         ...route,
+        operatingMonths: convertMonthsToNames(route.operatingMonths), // Task 4 Fix
         startStationDetails: startStation,
         endStationDetails: endStation
     };
@@ -133,6 +142,7 @@ export const getRouteWithSchedules = async (routeId) => {
 
     return {
         ...route,
+        operatingMonths: convertMonthsToNames(route.operatingMonths), // Task 4 Fix
         schedules: routeSchedules
     };
 };
@@ -147,6 +157,7 @@ export const getCompleteRouteDetails = async (routeId) => {
 
     return {
         ...route,
+        operatingMonths: convertMonthsToNames(route.operatingMonths), // Task 4 Fix
         startStationDetails: startStation,
         endStationDetails: endStation,
         schedules: routeSchedules
@@ -159,20 +170,24 @@ export const calculateTicketPrice = async (routeId, className) => {
 
     if (!route || !ticketClass) return null;
 
-    return route.distance * ticketClass.pricePerKm;
+    const priceInYen = route.distance * ticketClass.pricePerKm;
+    return yenToUsd(priceInYen); // Convert to USD
 };
 
 export const getTicketOptionsForRoute = async (routeId) => {
     const route = await getRouteById(routeId);
     if (!route) return null;
 
-    return db().ticketClasses.map(tc => ({
-        class: tc.class,
-        name: tc.name,
-        price: route.distance * tc.pricePerKm,
-        amenities: tc.amenities,
-        description: tc.description
-    }));
+    return db().ticketClasses.map(tc => {
+        const priceInYen = route.distance * tc.pricePerKm;
+        return {
+            class: tc.class,
+            name: tc.name,
+            price: yenToUsd(priceInYen), // Convert to USD here
+            amenities: tc.amenities,
+            description: tc.description
+        };
+    });
 };
 
 export const getTicketOptionsForSchedule = async (scheduleId) => {

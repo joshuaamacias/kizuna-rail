@@ -32,8 +32,8 @@
                                 <div class="ticket-header">
                                     <h3 class="ticket-name"><%= ticket.name %></h3>
                                     <div class="ticket-price">
-                                        <span class="price-symbol">¥</span>
-                                        <span class="price-amount"><%= Number(ticket.price).toLocaleString() %></span>
+                                        <span class="price-symbol">$</span>
+                                        <span class="price-amount"><%= Number(ticket.price).toFixed(2) %></span>
                                     </div>
                                 </div>
                                 
@@ -95,7 +95,6 @@
             </div>
 
             <div id="passengersList" class="passengers-list">
-                <!-- First passenger added by default -->
                 <div class="passenger-card" data-passenger-index="0">
                     <div class="passenger-card-header">
                         <h3 class="passenger-number">Passenger 1</h3>
@@ -129,7 +128,7 @@
                         <div class="form-group">
                             <label for="email-0" class="form-label">Email Address</label>
                             <input 
-                                type="email" 
+                                type="type" 
                                 id="email-0" 
                                 name="passengers[0][email]" 
                                 class="form-input" 
@@ -170,11 +169,11 @@
                 </div>
                 <div class="summary-row">
                     <span class="summary-label">Price per Ticket:</span>
-                    <span class="summary-value" id="pricePerTicket"><%= ticketOptions && ticketOptions[0] ? '¥' + Number(ticketOptions[0].price).toLocaleString() : '¥14,400' %></span>
+                    <span class="summary-value" id="pricePerTicket"><%= ticketOptions && ticketOptions[0] ? '$' + Number(ticketOptions[0].price).toFixed(2) : '$95.04' %></span>
                 </div>
                 <div class="summary-row total">
                     <span class="summary-label">Total Amount:</span>
-                    <span class="summary-value" id="totalAmount"><%= ticketOptions && ticketOptions[0] ? '¥' + Number(ticketOptions[0].price).toLocaleString() : '¥14,400' %></span>
+                    <span class="summary-value" id="totalAmount"><%= ticketOptions && ticketOptions[0] ? '$' + Number(ticketOptions[0].price).toFixed(2) : '$95.04' %></span>
                 </div>
             </div>
         </section>
@@ -204,9 +203,9 @@
 
     const updateSummary = () => {
         passengerCountDisplay.textContent = passengerCount;
-        pricePerTicket.textContent = `¥${ticketPrice.toLocaleString()}`;
+        pricePerTicket.textContent = `$${ticketPrice.toFixed(2)}`;
         const total = ticketPrice * passengerCount;
-        totalAmount.textContent = `¥${total.toLocaleString()}`;
+        totalAmount.textContent = `$${total.toFixed(2)}`;
     };
 
     const updatePassengerNumbers = () => {
@@ -354,7 +353,6 @@
         cards.forEach((card, index) => {
             const i = card.dataset.passengerIndex ? Number(card.dataset.passengerIndex) : index;
             
-            // 30% chance for Japanese name
             const isJapanese = Math.random() < 0.30;
             const firstName = randomItem(isJapanese ? japaneseFirstNames : westernFirstNames);
             const lastName = randomItem(isJapanese ? japaneseLastNames : westernLastNames);
@@ -371,13 +369,10 @@
             }
             if (phoneInput) {
                 if (isJapanese) {
-                    // Japanese fictional: using 0120 (toll-free, safe for testing)
                     phoneInput.value = `+81 120-${randInt(100, 999)}-${randInt(1000, 9999)}`;
                 } else if (Math.random() < 0.5) {
-                    // US fictional: 555-01xx
                     phoneInput.value = `+1 555-01${String(randInt(10, 99)).padStart(2, '0')}-${randInt(1000, 9999)}`;
                 } else {
-                    // UK fictional: 01632
                     phoneInput.value = `+44 1632 960${String(randInt(100, 999))}`;
                 }
             }
@@ -392,7 +387,6 @@
             e.preventDefault();
             const label = e.currentTarget;
 
-            // Update visual and input selection
             selectedDayLabels.forEach((lbl) => {
                 lbl.classList.remove('selected');
                 lbl.querySelector('input').checked = false;
@@ -420,7 +414,6 @@
             e.preventDefault();
             const selected = e.currentTarget;
 
-            // Update visual and input selection
             ticketRadios.forEach((input) => {
                 input.checked = false;
                 input.removeAttribute('checked');
@@ -429,9 +422,8 @@
             selected.checked = true;
             selected.setAttribute('checked', true);
 
-            // Update summary
             const ticketName = e.target.dataset.name;
-            ticketPrice = parseInt(e.target.dataset.price);
+            ticketPrice = parseFloat(e.target.dataset.price);
             
             selectedTicketName.textContent = ticketName;
             updateSummary();
@@ -443,12 +435,11 @@
         autoFillForm();
     });
 
-    // Initialize ticket based on default selection
     const selectedRadio = document.querySelector('input[name="ticketClass"]:checked');
     if (selectedRadio) {
         const ticketName = selectedRadio.dataset.name;
         selectedTicketName.textContent = ticketName;
-        ticketPrice = parseInt(selectedRadio.dataset.price);
+        ticketPrice = parseFloat(selectedRadio.dataset.price);
     }
     updateSummary();
 </script>

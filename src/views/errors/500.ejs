@@ -1,5 +1,10 @@
 <%- include('../partials/header') %>
 <h1>Something Went Wrong</h1>
+<img 
+            src="/images/500-error.jpg" 
+            alt="Scenic watercolor of a lone train track vanishing into the mountains"
+            class="error-hero-image"
+        />
 <p>
     We are experiencing technical difficulties. Our team has been notified and is working to fix the issue.
 </p>
@@ -7,12 +12,14 @@
     <a href="/">Return to homepage</a>.
 </p>
 
-<% if (NODE_ENV === 'development') { %>
+<% if (error && error.message) { %>
 <details open>
     <summary>Error Details:</summary>
-    <pre><%= error %></pre>
+    <pre><%= error.message %></pre>
     <br>
-    <pre><%= stack %></pre>
+    <% if (error.stack) { %>
+    <pre><%= error.stack %></pre>
+    <% } %>
 </details>
 <% } %>
 

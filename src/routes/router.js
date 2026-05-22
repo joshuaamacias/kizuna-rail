@@ -1,5 +1,5 @@
 import challengeScenariosRouter from './scenarios.js';
-import railRoutesRouter from './routes.js';
+import railRoutesRouter from './routes/index.js'; // i needed to change this 
 import { Router } from 'express';
 import { homePage, aboutPage, testErrorPage } from './index.js';
 

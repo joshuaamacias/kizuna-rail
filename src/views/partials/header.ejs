@@ -6,7 +6,7 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/main.css">
     <script src="/js/main.js"></script>
-    <% if (NODE_ENV.includes('dev')) { %>
+    <% if (typeof NODE_ENV !== 'undefined' && NODE_ENV && NODE_ENV.includes('dev')) { %>
         <script>
             // Get the current hostname and port from the browser
             const host = window.location.hostname;
@@ -25,7 +25,9 @@
     <header class="content-grid">
         <div class="content">
             <div class="logo">
-                <a href="/"><img src="/images/logo-with-text.png" alt="Kizuna Rail Logo"></a>
+                <a href="/" title="Kizuna Rail Home Page">
+                    <img src="/images/logo-with-text.png" alt="Kizuna Rail Logo" title="Kizuna Rail Home Page">
+                </a>
             </div>
             <nav>
                 <input id="mobile-menu-toggle" type="checkbox">

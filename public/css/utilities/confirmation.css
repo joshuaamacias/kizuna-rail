@@ -406,14 +406,99 @@ article.confirmation-page {
 }
 
 @media print {
+    /* 1. Hide global website layout elements (Header nav, footers, and booking buttons) */
+    header, footer, nav, .navbar, .confirmation-actions {
+        display: none !important;
+    }
+
+    /* 2. Global body reset to clear white space around the document */
+    html, body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 11pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     article.confirmation-page {
-        .confirmation-actions {
-            display: none;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        /* 3. Shrink header and replace pale background with a clean border */
+        .confirmation-header {
+            background-color: #fff !important;
+            border: 1px solid var(--clr-primary);
+            padding: var(--space-md) !important;
+            margin-bottom: var(--space-md) !important;
+            gap: var(--space-xs) !important;
+
+            .confirmation-message {
+                font-size: var(--font-size-sm) !important;
+            }
+
+            .booking-reference {
+                margin-top: var(--space-xs) !important;
+                padding: var(--space-xs) var(--space-md) !important;
+            }
         }
 
-        .confirmation-header {
-            background-color: white;
-            border: 2px solid var(--clr-primary);
+        /* 4. Compact the sections and remove oversized spaces */
+        .confirmation-content {
+            gap: var(--space-md) !important;
+
+            .section-title {
+                margin: 0 0 var(--space-xs) 0 !important;
+                padding-bottom: var(--space-xs) !important;
+                font-size: var(--font-size-md) !important;
+            }
+
+            /* Make grid layouts simpler for paper */
+            .booking-details .details-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: var(--space-sm) !important;
+
+                .detail-card {
+                    padding: var(--space-sm) !important;
+                    box-shadow: none !important;
+                }
+            }
+
+            /* Strip background tints and shadows off cards */
+            .passengers-info .passengers-list .passenger-info-card {
+                box-shadow: none !important;
+                
+                .passenger-header {
+                    padding: var(--space-xs) var(--space-md) !important;
+                    background-color: #fff !important;
+                }
+
+                .passenger-details {
+                    padding: var(--space-md) !important;
+                    flex-direction: row !important;
+                    gap: var(--space-md) !important;
+                }
+            }
+
+            /* Tighten up important information list items */
+            .important-info {
+                padding: var(--space-md) !important;
+                background-color: #fff !important;
+                
+                .info-title {
+                    margin-bottom: var(--space-xs) !important;
+                }
+                
+                .info-list {
+                    gap: var(--space-xs) !important;
+                }
+            }
         }
+    }
+
+    /* 5. Clean up standard browser page margins */
+    @page {
+        size: auto;
+        margin: 10mm;
     }
 }

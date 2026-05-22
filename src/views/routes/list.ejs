@@ -2,21 +2,25 @@
 <h1><%- title %></h1>
 
 <div id="filters">
-    Search by Region:
-    <select id="region-filter">
-        <option value="all">All Regions</option>
-        <% regions.forEach((region) => { %>
-            <option value="<%= region %>" <%= query.region === region ? 'selected' : '' %>><%= region.charAt(0).toUpperCase() + region.slice(1) %></option>
-        <% }); %>
-    </select>
+    <div class="filter-group">
+        <label for="region-filter">Search by Region:</label>
+        <select id="region-filter">
+            <option value="all">All Regions</option>
+            <% regions.forEach((region) => { %>
+                <option value="<%= region %>" <%= currentRegion === region ? 'selected' : '' %>><%= region.charAt(0).toUpperCase() + region.slice(1) %></option>
+            <% }); %>
+        </select>
+    </div>
 
-    Search by Season:
-    <select id="season-filter">
-        <option value="all">Any Season</option>
-        <% seasons.forEach((season) => { %>
-            <option value="<%= season %>" <%= query.season === season ? 'selected' : '' %>><%= season.charAt(0).toUpperCase() + season.slice(1) %></option>
-        <% }); %>
-    </select>
+    <div class="filter-group">
+        <label for="season-filter">Search by Season:</label>
+        <select id="season-filter">
+            <option value="all">Any Season</option>
+            <% seasons.forEach((season) => { %>
+                <option value="<%= season %>" <%= currentSeason === season ? 'selected' : '' %>><%= season.charAt(0).toUpperCase() + season.slice(1) %></option>
+            <% }); %>
+        </select>
+    </div>
 </div>
 
 <div class="routes-grid">
@@ -75,5 +79,32 @@
         </div>
     <% }); %>
 </div>
+
+<script>
+    // Event handling to update URL search parameters dynamically
+    const regionFilter = document.getElementById('region-filter');
+    const seasonFilter = document.getElementById('season-filter');
+
+    function updateFilters() {
+        const url = new URL(window.location.href);
+        
+        if (regionFilter.value && regionFilter.value !== 'all') {
+            url.searchParams.set('region', regionFilter.value);
+        } else {
+            url.searchParams.delete('region');
+        }
+
+        if (seasonFilter.value && seasonFilter.value !== 'all') {
+            url.searchParams.set('season', seasonFilter.value);
+        } else {
+            url.searchParams.delete('season');
+        }
+
+        window.location.href = url.toString();
+    }
+
+    regionFilter.addEventListener('change', updateFilters);
+    seasonFilter.addEventListener('change', updateFilters);
+</script>
 
 <%- include('../partials/footer') %>

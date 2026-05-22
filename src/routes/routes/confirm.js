@@ -1,4 +1,4 @@
-import { getConfirmationById } from '../models/model.js';
+import { getConfirmationById } from '../../models/model.js';
 
 export default async (req, res) => {
     const { confirmationId } = req.params;
